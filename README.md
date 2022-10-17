@@ -1,5 +1,5 @@
-# Rust by Example
-Working through the [Rust by Example](https://doc.rust-lang.org/stable/rust-by-example/index.html) tutorials.
+# Rust Experiments
+Small experiments in writing Rust programs to perform specific tasks.
 
 # Copyright and License
 Copyright 2022, Keith Sharp, kms@passback.co.uk.
