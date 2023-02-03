@@ -9,7 +9,24 @@ async fn main() -> Result<(), Error> {
     let client = Client::new(&config);
 
     let resp = client.list_buckets().send().await?;
-    println!("{:?}", resp);
+    let buckets = resp.buckets().unwrap_or_default();
+
+    for bucket in buckets {
+        println!("Bucket: {}", bucket.name().unwrap_or("Unamed"));
+        let tag_res = client.get_bucket_tagging().bucket(bucket.name().unwrap_or_default()).send().await;
+
+        match tag_res {
+            Ok(resp) => {
+                let tag_set = resp.tag_set().unwrap_or_default();
+                for tag in tag_set {
+                    let key = tag.key().unwrap_or_default();
+                    let value = tag.value().unwrap_or_default();
+                    println!("\tTag Name: {}, Tag Value: {}", key, value);
+                }
+            }
+            Err(_)  => continue // Should really match this to NoSuchTagSet
+        }
+    }
 
     Ok(())
 }
