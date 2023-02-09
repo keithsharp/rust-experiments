@@ -32,11 +32,13 @@ async fn main() -> Result<(), Error> {
     let vpcid = create_vpc(&client, &tags).await?;
     info!("Created VPC: {}", vpcid);
 
-    let subnetid = create_subnet(&client, &vpcid, &tags).await?;
-    info!("Created Subnet: {}", subnetid);
-
     let rtid = get_main_route_table(&client, &vpcid).await?;
     info!("Main Route Table: {}", rtid);
+
+    let subnetids = create_subnets(&client, &vpcid, &tags).await?;
+    for subnetid in subnetids {
+        info!("Created Subnet: {}", subnetid);
+    }
 
     Ok(())
 }
@@ -93,7 +95,42 @@ async fn get_main_route_table(client: &Client, vpcid: &str) -> Result<String, Er
     Ok(rtid)
 }
 
-async fn create_subnet(client: &Client, vpcid: &str, tags: &Vec<Tag>) -> Result<String, Error> {
+async fn get_availability_zones(client: &Client) -> Result<Vec<String>, Error> {
+    let region_filter = Filter::builder()
+        .name("region-name")
+        .values("eu-west-1")
+        .build();
+
+    let resp = client.describe_availability_zones()
+        .filters(region_filter)
+        .send()
+        .await?;
+
+    let azs = resp.availability_zones()
+        .expect("Failed to get Availability Zones from describe_availaibility_zones() response");
+
+    let mut az_list = Vec::new();
+    for zone in azs {
+        az_list.push(zone.zone_name().expect("Failed to get Zone Name").to_string());
+    }
+
+    Ok(az_list)
+}
+
+async fn create_subnets(client: &Client, vpcid: &str, tags: &Vec<Tag>) -> Result<Vec<String>, Error> {
+    let azs = get_availability_zones(&client).await?;
+
+    let mut subnets = Vec::new();
+    
+    for (i, zoneid) in azs.iter().enumerate() {
+        let subnetid = create_subnet(&client, &vpcid, &format!("10.0.{}.0/24", i), &zoneid, &tags).await?;
+        subnets.push(subnetid.to_string());
+    }
+
+    Ok(subnets)
+}
+
+async fn create_subnet(client: &Client, vpcid: &str, cidr: &str, az: &str, tags: &Vec<Tag>) -> Result<String, Error> {
     let tag_spec = TagSpecification::builder()
         .resource_type(ResourceType::Subnet)
         .set_tags(Some(tags.clone()))
@@ -101,7 +138,8 @@ async fn create_subnet(client: &Client, vpcid: &str, tags: &Vec<Tag>) -> Result<
     
     let resp = client.create_subnet()
         .vpc_id(vpcid)
-        .cidr_block("10.0.0.0/24")
+        .cidr_block(cidr)
+        .availability_zone(az)
         .tag_specifications(tag_spec)
         .send()
         .await?;
