@@ -1,4 +1,4 @@
-use aws_sdk_ec2::{Client, Error, model::Tag};
+use aws_sdk_ec2::{model::Tag, Client, Error};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -11,13 +11,11 @@ async fn main() -> Result<(), Error> {
     println!("{:?}", resp);
 
     // Create a Tag
-    let tag = Tag::builder()
-        .key("Project")
-        .value("AWS Rust Test")
-        .build();
+    let tag = Tag::builder().key("Project").value("AWS Rust Test").build();
 
     // Apply the Tag to a specific VPC
-    let add_tags_req = client.create_tags()
+    let add_tags_req = client
+        .create_tags()
         .resources("vpc-0be713be661b7db37")
         .tags(tag.clone());
     let add_tags_resp = add_tags_req.send().await?;
@@ -29,7 +27,8 @@ async fn main() -> Result<(), Error> {
     println!("{:?}", resp);
 
     // Delete the Tag from the VPC
-    let del_tags_req = client.delete_tags()
+    let del_tags_req = client
+        .delete_tags()
         .resources("vpc-0be713be661b7db37")
         .tags(tag);
     let del_tags_resp = del_tags_req.send().await?;

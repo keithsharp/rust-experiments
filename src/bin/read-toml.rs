@@ -1,6 +1,6 @@
 use std::env;
-use std::io;
 use std::fs::File;
+use std::io;
 use std::io::Read;
 
 use serde::Deserialize;
@@ -23,6 +23,6 @@ fn main() {
         io::stdin().read_to_string(&mut input).unwrap();
     }
 
-    let config:Config = toml::from_str(input.as_str()).expect("Could not deserialise");
+    let config: Config = toml::from_str(input.as_str()).expect("Could not deserialise");
     println!("Profile: {}, Region: {}", config.profile, config.region);
 }

@@ -20,7 +20,9 @@ fn main() {
     }
 
     // Using map_or() to provide a default of run a closure
-    let msg = maybe_option_string().map_or("Hello, Keith".to_string(), |s| s.chars().rev().collect::<String>());
+    let msg = maybe_option_string().map_or("Hello, Keith".to_string(), |s| {
+        s.chars().rev().collect::<String>()
+    });
     println!("Map Or: {msg}");
 
     // Use expect to panic on None
@@ -34,10 +36,11 @@ fn main() {
     println!("Unwrap or: {msg}");
 
     // Using unwrap_or_else() to provide provide a value
-    let msg = maybe_option_string().unwrap_or_else(|| "Hello, Keith".chars().rev().collect::<String>());
+    let msg =
+        maybe_option_string().unwrap_or_else(|| "Hello, Keith".chars().rev().collect::<String>());
     println!("Unwrap or else: {msg}");
 
-    // Using unwrap_or_default() to provide provide a value - an empty string 
+    // Using unwrap_or_default() to provide provide a value - an empty string
     let msg = maybe_option_string().unwrap_or_default();
     println!("Unwrap or default: {msg}");
 

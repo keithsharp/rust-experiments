@@ -1,6 +1,6 @@
 use aws_config::meta::region::RegionProviderChain;
+use aws_sdk_s3::model::{BucketLocationConstraint, CreateBucketConfiguration, Tag, Tagging};
 use aws_sdk_s3::{Client, Error};
-use aws_sdk_s3::model::{CreateBucketConfiguration, BucketLocationConstraint, Tag, Tagging};
 
 #[cfg(debug_assertions)]
 use env_logger::Env;
@@ -29,26 +29,35 @@ async fn main() -> Result<(), Error> {
         .build();
 
     info!("Creating bucket: {}", bucket_name.hyphenated().to_string());
-    client.create_bucket()
+    client
+        .create_bucket()
         .bucket(bucket_name.hyphenated().to_string())
         .create_bucket_configuration(cfg)
         .send()
         .await?;
 
-    let tag = Tag::builder().key("project").value("aws-create-bucket").build();
-    let tagging = Tagging::builder()
-        .tag_set(tag.clone()).
-        build();
-    
-    info!("Adding tag {}:{} to bucket {}", tag.key().unwrap(), tag.value().unwrap(), bucket_name.hyphenated().to_string());
-    client.put_bucket_tagging()
+    let tag = Tag::builder()
+        .key("project")
+        .value("aws-create-bucket")
+        .build();
+    let tagging = Tagging::builder().tag_set(tag.clone()).build();
+
+    info!(
+        "Adding tag {}:{} to bucket {}",
+        tag.key().unwrap(),
+        tag.value().unwrap(),
+        bucket_name.hyphenated().to_string()
+    );
+    client
+        .put_bucket_tagging()
         .bucket(bucket_name.hyphenated().to_string())
         .tagging(tagging)
         .send()
         .await?;
 
     info!("Deleting bucket: {}", bucket_name.hyphenated().to_string());
-    client.delete_bucket()
+    client
+        .delete_bucket()
         .bucket(bucket_name.hyphenated().to_string())
         .send()
         .await?;

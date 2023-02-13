@@ -1,17 +1,20 @@
 use std::env;
 
-use aws_config::default_provider::region::DefaultRegionChain;
 use aws_config::default_provider::credentials::DefaultCredentialsChain;
+use aws_config::default_provider::region::DefaultRegionChain;
 
-use aws_sdk_ec2::Error;
 use aws_sdk_ec2::Client;
+use aws_sdk_ec2::Error;
 use aws_sdk_ec2::Region;
 
 use aws_sdk_ec2::model::Filter;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let profile = env::args().skip(1).next().expect("profile to use is required");
+    let profile = env::args()
+        .skip(1)
+        .next()
+        .expect("profile to use is required");
 
     let region = DefaultRegionChain::builder()
         .profile_name(&profile)
@@ -39,8 +42,7 @@ async fn main() -> Result<(), Error> {
         .values("test-soto")
         .build();
 
-    let req = client.describe_vpcs()
-        .filters(filter);
+    let req = client.describe_vpcs().filters(filter);
     let resp = req.send().await?;
     println!("{:?}", resp);
 

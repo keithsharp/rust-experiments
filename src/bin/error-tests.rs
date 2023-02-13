@@ -1,5 +1,5 @@
-use std::fmt;
 use std::error::Error;
+use std::fmt;
 
 use rand::prelude::*;
 
@@ -7,51 +7,52 @@ fn main() {
     // Using a String as an error type
     match string_error() {
         Err(e) => println!("String error: {e}"),
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     };
 
     // Using a Unit Struct implementing Error as an error type
     match struct_error() {
         Err(e) => println!("Struct error: {e}"),
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     };
 
     // Using a Struct with a source member (nesting the above Unit Struct) as an error type
     match struct_super_error() {
-        Err(e) => println!("Struct super error: {e}, caused by '{}'", e.source().unwrap()),
-        _ => println!("No errors received")
+        Err(e) => println!(
+            "Struct super error: {e}, caused by '{}'",
+            e.source().unwrap()
+        ),
+        _ => println!("No errors received"),
     };
 
     // Using an Enum with two variants as an error type
     match enum_error() {
         Err(EnumError::First) => println!("EnumError::First"),
         Err(EnumError::Second) => println!("EnumError::Second"),
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     };
 
     // Using an Enum with two variants and implementing Error as an error type
     // Match on Error, then match on the Enum variant, could be implmented as previous match^^
     match enum_trait_error() {
-        Err(e) => {
-            match e {
-                EnumTraitError::First => println!("EnumTraitError::First"),
-                EnumTraitError::Second => println!("EnumTraitError::Second"),
-            }
+        Err(e) => match e {
+            EnumTraitError::First => println!("EnumTraitError::First"),
+            EnumTraitError::Second => println!("EnumTraitError::Second"),
         },
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     };
 
     // Using an Enum with two variants and implementing Error as an error type
     // Match on error and use match in EnumTraitError::display to switch message
     match enum_trait_error() {
         Err(e) => println!("EnumTraitError error: {e}"),
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     }
 
     // Using an Enum with one varient that contains a source value (an EnumTraitError)
     match enum_super_error() {
         Err(e) => println!("Enum super error: {e}, caused by '{}'", e.source().unwrap()),
-        _ => println!("No errors received")
+        _ => println!("No errors received"),
     };
 }
 
@@ -95,7 +96,9 @@ impl Error for StructSuperError {
 }
 
 fn struct_super_error() -> Result<(), StructSuperError> {
-    Err(StructSuperError { source: StructError })
+    Err(StructSuperError {
+        source: StructError,
+    })
 }
 
 // Enum Error
@@ -142,7 +145,7 @@ fn enum_trait_error() -> Result<(), EnumTraitError> {
 // Enum Nested Error
 #[derive(Debug)]
 enum EnumSuperError {
-    First { source: EnumTraitError},
+    First { source: EnumTraitError },
 }
 
 impl fmt::Display for EnumSuperError {
@@ -156,11 +159,13 @@ impl fmt::Display for EnumSuperError {
 impl Error for EnumSuperError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
-            EnumSuperError::First { source } => Some(source)
+            EnumSuperError::First { source } => Some(source),
         }
     }
 }
 
 fn enum_super_error() -> Result<(), EnumSuperError> {
-    Err(EnumSuperError::First { source: EnumTraitError::Second })
+    Err(EnumSuperError::First {
+        source: EnumTraitError::Second,
+    })
 }

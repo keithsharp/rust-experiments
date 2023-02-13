@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand, Args};
+use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser)]
 struct Cli {
@@ -36,16 +36,14 @@ fn main() {
     match cli.command {
         Commands::Hello(args) => {
             println!("Hello, {}!", args.name);
-        },
-        Commands::Goodbye(args) => {
-            match args.commands {
-                GoodbyeCommands::Final => {
-                    println!("It's a final goodbye.");
-                },
-                GoodbyeCommands::Temporary => {
-                    println!("We'll meet again soon.")
-                }
-            }
         }
+        Commands::Goodbye(args) => match args.commands {
+            GoodbyeCommands::Final => {
+                println!("It's a final goodbye.");
+            }
+            GoodbyeCommands::Temporary => {
+                println!("We'll meet again soon.")
+            }
+        },
     }
 }

@@ -10,7 +10,7 @@ struct Arguments {
 
 fn main() {
     let args = Arguments::parse();
-    
+
     if args.debug {
         println!("{:?}", args);
     }

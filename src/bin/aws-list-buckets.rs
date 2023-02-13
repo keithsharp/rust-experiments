@@ -13,7 +13,11 @@ async fn main() -> Result<(), Error> {
 
     for bucket in buckets {
         println!("Bucket: {}", bucket.name().unwrap_or("Unamed"));
-        let tag_res = client.get_bucket_tagging().bucket(bucket.name().unwrap_or_default()).send().await;
+        let tag_res = client
+            .get_bucket_tagging()
+            .bucket(bucket.name().unwrap_or_default())
+            .send()
+            .await;
 
         match tag_res {
             Ok(resp) => {
@@ -24,7 +28,7 @@ async fn main() -> Result<(), Error> {
                     println!("\tTag Name: {}, Tag Value: {}", key, value);
                 }
             }
-            Err(_)  => continue // Should really match this to NoSuchTagSet
+            Err(_) => continue, // Should really match this to NoSuchTagSet
         }
     }
 
