@@ -100,6 +100,11 @@ async fn main() -> Result<(), Error> {
         sg_two_id, sg_two_name, sg_two_vpc, sg_two_account
     );
 
+    println!("About to sleep for 10 seconds");
+    let ten_seconds = std::time::Duration::from_secs(10);
+    std::thread::sleep(ten_seconds);
+    println!("Finished sleeping, about to add the ingress rule");
+
     // Add an ingress rule to SG-Two allowing access from SG-One
     client
         .authorize_security_group_ingress()
