@@ -1,5 +1,6 @@
 # Local
 bevy/
+tmp/
 
 # General
 .DS_Store
