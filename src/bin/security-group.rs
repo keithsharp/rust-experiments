@@ -1,5 +1,8 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::{Client, Error};
+use aws_sdk_ec2::{
+    model::{IpPermission, UserIdGroupPair},
+    Client, Error,
+};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -100,18 +103,21 @@ async fn main() -> Result<(), Error> {
         sg_two_id, sg_two_name, sg_two_vpc, sg_two_account
     );
 
-    println!("About to sleep for 10 seconds");
-    let ten_seconds = std::time::Duration::from_secs(10);
-    std::thread::sleep(ten_seconds);
-    println!("Finished sleeping, about to add the ingress rule");
-
     // Add an ingress rule to SG-Two allowing access from SG-One
+    let pair = UserIdGroupPair::builder()
+        .group_id(sg_one_id)
+        .vpc_id(vpcid)
+        .build();
+
+    let permission = IpPermission::builder()
+        .ip_protocol("-1") // All protocols and all ports
+        .user_id_group_pairs(pair)
+        .build();
+
     client
         .authorize_security_group_ingress()
         .group_id(sg_two_id)
-        // This shouldn't be needed, but just in case
-        .source_security_group_owner_id(sg_one_account)
-        .source_security_group_name(sg_one_name)
+        .ip_permissions(permission)
         .send()
         .await?;
 
