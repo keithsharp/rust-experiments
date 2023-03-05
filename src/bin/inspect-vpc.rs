@@ -1,8 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::{
-    model::{Filter, Vpc},
-    Client,
-};
+use aws_sdk_ec2::{model::Filter, Client};
 
 use anyhow::anyhow;
 
@@ -16,57 +13,95 @@ async fn main() -> anyhow::Result<()> {
     let client = Client::new(&config);
 
     let vpc = match std::env::args().nth(1) {
-        Some(vpcid) => get_vpc(&client, &vpcid).await?,
-        _ => get_default_vpc(&client).await?,
+        Some(vpcid) => Vpc::new_from_vpc_id(&client, &vpcid).await?,
+        _ => Vpc::default_vpc(&client).await?,
     };
 
-    print_vpc_info(&vpc);
+    vpc.print_info();
 
     Ok(())
 }
 
-async fn get_vpc(client: &Client, vpcid: &str) -> anyhow::Result<Vpc> {
-    let filter = Filter::builder().name("vpc-id").values(vpcid).build();
+// My own VPC struct to unwrap the AWS SDK into
+pub struct Vpc {
+    id: String,
+    account: String,
+    default: bool,
+}
 
-    let resp = client.describe_vpcs().filters(filter).send().await?;
+impl Vpc {
+    pub fn new_from_vpc(vpc: &aws_sdk_ec2::model::Vpc) -> Self {
+        let id = vpc
+            .vpc_id()
+            .expect("a VPC should always have an ID")
+            .to_owned();
+        let account = vpc
+            .owner_id()
+            .expect("a VPC should always have an owner_id")
+            .to_owned();
+        let default = vpc
+            .is_default()
+            .expect("a VPC should always have a flag for is_default")
+            .to_owned();
 
-    if let Some(vpcs) = resp.vpcs() {
-        if let Some(vpc) = vpcs.get(0) {
-            return Ok(vpc.clone());
+        Self {
+            id,
+            account,
+            default,
         }
     }
 
-    Err(anyhow!(format!("Could not find VPC with ID: {}", &vpcid)))
-}
+    async fn default_vpc(client: &Client) -> anyhow::Result<Vpc> {
+        let filter = Filter::builder().name("is-default").values("true").build();
 
-async fn get_default_vpc(client: &Client) -> anyhow::Result<Vpc> {
-    let filter = Filter::builder().name("is-default").values("true").build();
+        let resp = client.describe_vpcs().filters(filter).send().await?;
 
-    let resp = client.describe_vpcs().filters(filter).send().await?;
-
-    if let Some(vpcs) = resp.vpcs() {
-        if let Some(vpc) = vpcs.get(0) {
-            return Ok(vpc.clone());
+        if let Some(vpcs) = resp.vpcs() {
+            if let Some(vpc) = vpcs.get(0) {
+                return Ok(Vpc::new_from_vpc(vpc));
+            }
         }
+
+        Err(anyhow!("Could not find a default VPC"))
     }
 
-    Err(anyhow!("Could not find a default VPC"))
+    async fn new_from_vpc_id(client: &Client, vpcid: &str) -> anyhow::Result<Vpc> {
+        let filter = Filter::builder().name("vpc-id").values(vpcid).build();
+
+        let resp = client.describe_vpcs().filters(filter).send().await?;
+
+        if let Some(vpcs) = resp.vpcs() {
+            if let Some(vpc) = vpcs.get(0) {
+                return Ok(Vpc::new_from_vpc(vpc));
+            }
+        }
+
+        Err(anyhow!(format!("Could not find VPC with ID: {}", &vpcid)))
+    }
 }
 
-fn print_vpc_info(vpc: &Vpc) {
-    let vpcid = vpc.vpc_id().expect("a VPC should always have an ID");
-    print!("VPC ID: {vpcid}");
-    if vpc
-        .is_default()
-        .expect("a VPC should always have a flag for is_default")
-    {
-        println!(" (default)");
-    } else {
-        println!();
+impl Vpc {
+    pub fn vpc_id(&self) -> String {
+        self.id.clone()
     }
 
-    let accountid = vpc
-        .owner_id()
-        .expect("a VPC should always have an owner_id");
-    println!("    Account ID: {accountid}");
+    pub fn account_id(&self) -> String {
+        self.account.clone()
+    }
+
+    pub fn is_default(&self) -> bool {
+        self.default
+    }
+}
+
+impl Vpc {
+    fn print_info(&self) {
+        print!("VPC ID: {}", self.id);
+        if self.default {
+            println!(" (default)");
+        } else {
+            println!();
+        }
+        println!("    Account ID: {}", self.account);
+    }
 }
