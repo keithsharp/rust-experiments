@@ -5,6 +5,8 @@ use aws_sdk_ec2::model::{
 };
 use aws_sdk_ec2::{Client, Error};
 
+use base64::{engine::general_purpose, Engine as _};
+
 use std::{thread, time};
 
 #[tokio::main]
@@ -51,6 +53,8 @@ async fn main() -> Result<(), Error> {
         .send()
         .await?;
 
+    println!("Created VPC: {}", vpcid);
+
     // Create a subnet
     let tag_spec = TagSpecification::builder()
         .resource_type(ResourceType::Subnet)
@@ -78,6 +82,8 @@ async fn main() -> Result<(), Error> {
         .send()
         .await?;
 
+    println!("Created Subnet: {}", subnetid);
+
     // Get the ID of the main Route Table
     let vpc_id_filter = Filter::builder().name("vpc-id").values(vpcid).build();
     let main_route_table_filter = Filter::builder()
@@ -100,6 +106,8 @@ async fn main() -> Result<(), Error> {
         .route_table_id()
         .expect("main route table should always have an ID");
 
+    println!("Got Route Table ID: {}", rtid);
+
     // Create Internet Gateway
     let resp = client.create_internet_gateway().send().await?;
 
@@ -109,13 +117,14 @@ async fn main() -> Result<(), Error> {
         .internet_gateway_id()
         .expect("an Internet Gateway should always have an ID");
 
-    // Attach Internet Gateway to VPC
     client
         .attach_internet_gateway()
         .internet_gateway_id(igid)
         .vpc_id(vpcid)
         .send()
         .await?;
+
+    println!("Attached {} to {}", igid, vpcid);
 
     // Add a route to the Internet
     client
@@ -125,6 +134,8 @@ async fn main() -> Result<(), Error> {
         .route_table_id(rtid)
         .send()
         .await?;
+
+    println!("Added a default route to {} via {}", rtid, igid);
 
     // Create a Security Group
     let resp = client
@@ -149,7 +160,22 @@ async fn main() -> Result<(), Error> {
         .send()
         .await?;
 
+    println!("Created Security Group: {}", sgid);
+
     // Launch an instance
+    // Log to serial console and file.
+    // Taken from: https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-log-user-data/
+    let userdata = r##"#!/bin/bash -xe
+    exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+    mkdir /blender
+    cd /blender
+    curl -s -L https://download.blender.org/release/Blender3.4/blender-3.4.1-linux-x64.tar.xz -o blender-3.4.1-linux-x64.tar.xz
+    tar xf blender-3.4.1-linux-x64.tar.xz
+    yum -y install libX11 libXrender libXxf86vm libXfixes libXi libxkbcommon
+"##;
+
+    let userdata = general_purpose::STANDARD_NO_PAD.encode(userdata);
+
     let resp = client
         .run_instances()
         .instance_type(InstanceType::T3Micro)
@@ -160,6 +186,7 @@ async fn main() -> Result<(), Error> {
         .security_group_ids(sgid)
         .key_name("rust-test")
         .instance_initiated_shutdown_behavior(ShutdownBehavior::Terminate)
+        .user_data(userdata)
         .send()
         .await?;
 
@@ -217,7 +244,9 @@ async fn main() -> Result<(), Error> {
         thread::sleep(delay);
     }
 
-    println!("Instances are all running.");
+    for instance in instances {
+        println!("Instance {} is running", instance);
+    }
 
     Ok(())
 }
