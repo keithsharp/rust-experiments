@@ -1,5 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::model::{Filter, ResourceType, Tag, TagSpecification};
+use aws_sdk_ec2::model::{AttributeBooleanValue, Filter, ResourceType, Tag, TagSpecification};
 use aws_sdk_ec2::{Client, Error};
 
 #[cfg(debug_assertions)]
@@ -174,6 +174,13 @@ async fn create_subnet(
         .subnet_id()
         .expect("Failed to get Subnet ID from Subnet")
         .to_string();
+
+    client
+        .modify_subnet_attribute()
+        .subnet_id(&subnetid)
+        .map_public_ip_on_launch(AttributeBooleanValue::builder().value(true).build())
+        .send()
+        .await?;
 
     Ok(subnetid)
 }
