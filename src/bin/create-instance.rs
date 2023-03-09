@@ -1,20 +1,22 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_ec2::model::{
-    AttributeBooleanValue, Filter, Instance, InstanceType, ResourceType, ShutdownBehavior, Tag,
-    TagSpecification,
+    AttributeBooleanValue, Filter, IamInstanceProfileSpecification, Instance, InstanceType,
+    ResourceType, ShutdownBehavior, Tag, TagSpecification,
 };
-use aws_sdk_ec2::{Client, Error};
+use aws_sdk_ec2::Client as Ec2Client;
+use aws_sdk_iam::Client as IamClient;
 
 use base64::{engine::general_purpose, Engine as _};
 
 use std::{thread, time};
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> anyhow::Result<()> {
     let region_provider = RegionProviderChain::default_provider().or_else("eu-west-1");
 
     let config = aws_config::from_env().region(region_provider).load().await;
-    let client = Client::new(&config);
+    let ec2_client = Ec2Client::new(&config);
+    let iam_client = IamClient::new(&config);
 
     let tags = vec![
         Tag::builder()
@@ -27,13 +29,88 @@ async fn main() -> Result<(), Error> {
             .build(),
     ];
 
+    // Create the Role
+    let trust_policy = r#"{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "EC2AssumeRole",
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "ec2.amazonaws.com"
+                },
+                "Action": "sts:AssumeRole"
+            }
+        ]
+    }"#;
+
+    let resp = iam_client
+        .create_role()
+        .role_name("TestInstanceProfile")
+        .description("Allow Listing, Putting, and Getting objects from a specific S3 bucket")
+        .assume_role_policy_document(trust_policy)
+        .send()
+        .await?;
+
+    let role = resp.role().expect("should always get a Role struct back");
+    let role_name = role.role_name().expect("should always get a Role name");
+    println!("Created role {}", role_name);
+
+    // Attach a Policy to the Role
+    let policy = r#"{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "AllowFullS3Access",
+                "Effect": "Allow",
+                "Action": ["s3:*"],
+                "Resource": ["*"]
+            }
+        ]
+    }"#;
+
+    iam_client
+        .put_role_policy()
+        .role_name(role_name)
+        .policy_name("S3AccessPolicy")
+        .policy_document(policy)
+        .send()
+        .await?;
+    println!("Added policy to role: {}", role_name);
+
+    // Create the Instance Profile
+    let resp = iam_client
+        .create_instance_profile()
+        .instance_profile_name("TestInstanceProfile")
+        .send()
+        .await?;
+
+    let profile_name = resp
+        .instance_profile()
+        .expect("should always get an Instance Profile")
+        .instance_profile_name()
+        .expect("should always get an instance profile name");
+    println!("Created Instance Profile {}", profile_name);
+
+    // Connect the Role and the Instance Profile
+    iam_client
+        .add_role_to_instance_profile()
+        .instance_profile_name(profile_name)
+        .role_name(role_name)
+        .send()
+        .await?;
+    println!(
+        "Assigned Role {} to Instance Profile {}",
+        role_name, profile_name
+    );
+
     // Create the VPC
     let tag_spec = TagSpecification::builder()
         .resource_type(ResourceType::Vpc)
         .set_tags(Some(tags.clone()))
         .build();
 
-    let resp = client
+    let resp = ec2_client
         .create_vpc()
         .cidr_block("10.0.0.0/16")
         .tag_specifications(tag_spec)
@@ -46,7 +123,7 @@ async fn main() -> Result<(), Error> {
         .vpc_id()
         .expect("Failed to get VPC ID from VPC");
 
-    client
+    ec2_client
         .modify_vpc_attribute()
         .vpc_id(vpcid)
         .enable_dns_hostnames(AttributeBooleanValue::builder().value(true).build())
@@ -61,7 +138,7 @@ async fn main() -> Result<(), Error> {
         .set_tags(Some(tags.clone()))
         .build();
 
-    let resp = client
+    let resp = ec2_client
         .create_subnet()
         .vpc_id(vpcid)
         .cidr_block("10.0.0.0/24")
@@ -75,7 +152,7 @@ async fn main() -> Result<(), Error> {
         .subnet_id()
         .expect("Failed to get Subnet ID from Subnet");
 
-    client
+    ec2_client
         .modify_subnet_attribute()
         .subnet_id(subnetid)
         .map_public_ip_on_launch(AttributeBooleanValue::builder().value(true).build())
@@ -91,7 +168,7 @@ async fn main() -> Result<(), Error> {
         .values("true")
         .build();
 
-    let resp = client
+    let resp = ec2_client
         .describe_route_tables()
         .filters(vpc_id_filter)
         .filters(main_route_table_filter)
@@ -109,7 +186,7 @@ async fn main() -> Result<(), Error> {
     println!("Got Route Table ID: {}", rtid);
 
     // Create Internet Gateway
-    let resp = client.create_internet_gateway().send().await?;
+    let resp = ec2_client.create_internet_gateway().send().await?;
 
     let igid = resp
         .internet_gateway()
@@ -117,7 +194,7 @@ async fn main() -> Result<(), Error> {
         .internet_gateway_id()
         .expect("an Internet Gateway should always have an ID");
 
-    client
+    ec2_client
         .attach_internet_gateway()
         .internet_gateway_id(igid)
         .vpc_id(vpcid)
@@ -127,7 +204,7 @@ async fn main() -> Result<(), Error> {
     println!("Attached {} to {}", igid, vpcid);
 
     // Add a route to the Internet
-    client
+    ec2_client
         .create_route()
         .destination_cidr_block("0.0.0.0/0")
         .gateway_id(igid)
@@ -138,7 +215,7 @@ async fn main() -> Result<(), Error> {
     println!("Added a default route to {} via {}", rtid, igid);
 
     // Create a Security Group
-    let resp = client
+    let resp = ec2_client
         .create_security_group()
         .group_name("SSH Allowed")
         .description("Allow SSH from anywhere")
@@ -150,7 +227,7 @@ async fn main() -> Result<(), Error> {
         .group_id()
         .expect("should always get a security group ID back");
 
-    client
+    ec2_client
         .authorize_security_group_ingress()
         .group_id(sgid)
         .ip_protocol("tcp")
@@ -175,8 +252,18 @@ async fn main() -> Result<(), Error> {
 "##;
 
     let userdata = general_purpose::STANDARD_NO_PAD.encode(userdata);
+    let instance_profile = IamInstanceProfileSpecification::builder()
+        .name(profile_name)
+        .build();
 
-    let resp = client
+    // It takes a while for changes to IAM (the Role, Policy, and Instance Profile)
+    // to reach eventual consistency across all of the AWS Regions.  The proper solution
+    // is Waiters: https://github.com/awslabs/aws-sdk-rust/issues/400
+    let duration = 5;
+    println!("Sleeping for {duration} seconds to allow the IAM Instance Profile to propagate");
+    std::thread::sleep(std::time::Duration::from_secs(duration));
+
+    let resp = ec2_client
         .run_instances()
         .instance_type(InstanceType::T3Micro)
         .image_id("ami-065793e81b1869261")
@@ -186,6 +273,7 @@ async fn main() -> Result<(), Error> {
         .security_group_ids(sgid)
         .key_name("rust-test")
         .instance_initiated_shutdown_behavior(ShutdownBehavior::Terminate)
+        .iam_instance_profile(instance_profile)
         .user_data(userdata)
         .send()
         .await?;
@@ -204,7 +292,7 @@ async fn main() -> Result<(), Error> {
     // Wait for the Instance to move from Pending to Running
     let delay = time::Duration::from_secs(5);
     loop {
-        let resp = client
+        let resp = ec2_client
             .describe_instances()
             .set_instance_ids(Some(instances.clone()))
             .send()
