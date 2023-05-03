@@ -1,0 +1,13 @@
+[package]
+name = "aws-profile"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Choose which AWS Credentials profile to use."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aws-config = { workspace = true }
+aws-sdk-ec2 = { workspace = true }
+aws-types = { workspace = true }
+tokio = { workspace = true }

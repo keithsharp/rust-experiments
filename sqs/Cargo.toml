@@ -1,0 +1,15 @@
+[package]
+name = "sqs"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Create, delete, describe, and send messages to SQS queues."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+aws-arn = "0.3"
+aws-config = { workspace = true }
+aws-sdk-sqs = { workspace = true }
+clap = { workspace = true }
+tokio = { workspace = true }

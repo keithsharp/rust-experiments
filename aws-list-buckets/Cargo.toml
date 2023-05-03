@@ -1,0 +1,12 @@
+[package]
+name = "aws-list-buckets"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "List all the S3 Buckets in an account."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aws-config = { workspace = true }
+aws-sdk-s3 = { workspace = true }
+tokio = { workspace = true }

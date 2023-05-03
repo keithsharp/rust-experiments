@@ -1,0 +1,15 @@
+[package]
+name = "s3-file-upload"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Create an S3 bucket and upload a file."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aws-config = { workspace = true }
+aws-sdk-s3 = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true }

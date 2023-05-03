@@ -1,0 +1,12 @@
+[package]
+name = "more-errors"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "More experiments with Rust Errors and the thiserror crate."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+rand = { workspace = true }
+thiserror = "1.0" 

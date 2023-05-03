@@ -1,0 +1,11 @@
+[package]
+name = "clap-positional"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Experiment with Clap positional arguments."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }

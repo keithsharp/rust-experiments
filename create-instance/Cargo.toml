@@ -1,0 +1,15 @@
+[package]
+name = "create-instance"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Create an EC2 Instance and all the support VPC and IAM bits."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+aws-config = { workspace = true }
+aws-sdk-ec2 = { workspace = true }
+aws-sdk-iam = { workspace = true }
+base64 = "0.21"
+tokio = { workspace = true }

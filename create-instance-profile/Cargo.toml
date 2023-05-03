@@ -1,0 +1,12 @@
+[package]
+name = "create-instance-profile"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Create an Instance Profile with a Role and Trust Policy."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aws-config = { workspace = true }
+aws-sdk-iam = { workspace = true }
+tokio = { workspace = true }

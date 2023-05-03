@@ -1,0 +1,10 @@
+[package]
+name = "error-tests"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Basic experiments using Rust Errors."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = { workspace = true }
