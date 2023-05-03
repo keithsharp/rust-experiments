@@ -1,5 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_s3::model::{BucketLocationConstraint, CreateBucketConfiguration, Tag, Tagging};
+use aws_sdk_s3::types::{BucketLocationConstraint, CreateBucketConfiguration, Tag, Tagging};
 use aws_sdk_s3::{Client, Error};
 
 #[cfg(debug_assertions)]

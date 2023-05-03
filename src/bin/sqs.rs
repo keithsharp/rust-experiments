@@ -103,7 +103,7 @@ async fn url_to_name(client: &Client, url: &str) -> anyhow::Result<String> {
     let resp = client
         .get_queue_attributes()
         .queue_url(url)
-        .attribute_names(aws_sdk_sqs::model::QueueAttributeName::QueueArn)
+        .attribute_names(aws_sdk_sqs::types::QueueAttributeName::QueueArn)
         .send()
         .await?;
 
@@ -111,7 +111,7 @@ async fn url_to_name(client: &Client, url: &str) -> anyhow::Result<String> {
         .attributes()
         .expect("should always get queue attributes");
 
-    match attributes.get(&aws_sdk_sqs::model::QueueAttributeName::QueueArn) {
+    match attributes.get(&aws_sdk_sqs::types::QueueAttributeName::QueueArn) {
         Some(arn) => {
             let arn: ResourceName = arn.parse().expect("should always get a valid ARN");
             println!("{} {}", arn.resource, url);
@@ -152,7 +152,7 @@ async fn describe_queue(client: &Client, name: &str) -> anyhow::Result<()> {
 
     let resp = client
         .get_queue_attributes()
-        .attribute_names(aws_sdk_sqs::model::QueueAttributeName::All)
+        .attribute_names(aws_sdk_sqs::types::QueueAttributeName::All)
         .queue_url(&url)
         .send()
         .await?;
@@ -162,10 +162,10 @@ async fn describe_queue(client: &Client, name: &str) -> anyhow::Result<()> {
         .expect("should always get queue attributes");
 
     let arn = attributes
-        .get(&aws_sdk_sqs::model::QueueAttributeName::QueueArn)
+        .get(&aws_sdk_sqs::types::QueueAttributeName::QueueArn)
         .expect("queue should always have an ARN");
     let message_count = attributes
-        .get(&aws_sdk_sqs::model::QueueAttributeName::ApproximateNumberOfMessages)
+        .get(&aws_sdk_sqs::types::QueueAttributeName::ApproximateNumberOfMessages)
         .expect("queue should always have a message count even if it's zero");
 
     println!("{}", name);

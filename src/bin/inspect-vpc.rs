@@ -1,5 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::{model::Filter, Client};
+use aws_sdk_ec2::{types::Filter, Client};
 
 use anyhow::anyhow;
 
@@ -30,7 +30,7 @@ pub struct Vpc {
 }
 
 impl Vpc {
-    pub fn new_from_vpc(vpc: &aws_sdk_ec2::model::Vpc) -> Self {
+    pub fn new_from_vpc(vpc: &aws_sdk_ec2::types::Vpc) -> Self {
         let id = vpc
             .vpc_id()
             .expect("a VPC should always have an ID")

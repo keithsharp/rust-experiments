@@ -1,6 +1,6 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_ec2::{
-    model::{IpPermission, UserIdGroupPair},
+    types::{IpPermission, UserIdGroupPair},
     Client, Error,
 };
 

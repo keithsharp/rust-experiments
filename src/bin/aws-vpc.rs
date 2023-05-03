@@ -1,4 +1,4 @@
-use aws_sdk_ec2::{model::Tag, Client, Error};
+use aws_sdk_ec2::{types::Tag, Client, Error};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

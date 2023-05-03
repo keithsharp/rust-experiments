@@ -1,5 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::model::{AttributeBooleanValue, Filter, ResourceType, Tag, TagSpecification};
+use aws_sdk_ec2::types::{AttributeBooleanValue, Filter, ResourceType, Tag, TagSpecification};
 use aws_sdk_ec2::{Client, Error};
 
 #[cfg(debug_assertions)]

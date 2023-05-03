@@ -5,7 +5,8 @@ use aws_config::default_provider::region::DefaultRegionChain;
 
 use aws_sdk_ec2::Client;
 use aws_sdk_ec2::Error;
-use aws_sdk_ec2::Region;
+
+use aws_types::region::Region;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {

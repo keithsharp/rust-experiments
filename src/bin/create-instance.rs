@@ -1,5 +1,5 @@
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_ec2::model::{
+use aws_sdk_ec2::types::{
     AttributeBooleanValue, Filter, IamInstanceProfileSpecification, Instance, InstanceType,
     ResourceType, ShutdownBehavior, Tag, TagSpecification,
 };
