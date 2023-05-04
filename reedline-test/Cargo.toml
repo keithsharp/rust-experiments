@@ -1,0 +1,10 @@
+[package]
+name = "reedline-test"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Reading from the terminal."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+reedline = "0.19"

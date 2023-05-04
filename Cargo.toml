@@ -17,6 +17,7 @@ members = [
     "more-errors",
     "option",
     "read-toml",
+    "reedline-test",
     "repl",
     "s3-file-upload",
     "s3-gateway-endpoint",

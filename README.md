@@ -7,7 +7,8 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Options](https://github.com/keithsharp/rust-experiments/tree/main/option) - Experiments using Rust Option enums and their methods.
 
 ## Interesting Crates
-+ [Parsing TOML](https://github.com/keithsharp/rust-experiments/tree/main/read-toml) - Read values from a TOML formatted file using [`Serde`](https://serde.rs).
++ [Parsing TOML](https://github.com/keithsharp/rust-experiments/tree/main/read-toml) - Read values from a TOML formatted file using [`serde`](https://serde.rs).
++ [Reedline](https://github.com/keithsharp/rust-experiments/tree/main/reedline) - Reading from the terminal with [`reedline`](https://docs.rs/reedline/latest/reedline/). 
 + [REPL](https://github.com/keithsharp/rust-experiments/tree/main/repl) - Create a Read, Eval, Print, Loop (REPL) interface using [`reedline-repl-rs`](https://docs.rs/reedline-repl-rs/latest/reedline_repl_rs/).
 
 ## AWS Rust SDK
