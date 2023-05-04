@@ -1,0 +1,11 @@
+[package]
+name = "repl"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Create a Read, Eval, Print, Loop (REPL) interface."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+reedline-repl-rs = "1.0"

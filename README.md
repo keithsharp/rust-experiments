@@ -8,6 +8,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 
 ## Interesting Crates
 + [Parsing TOML](https://github.com/keithsharp/rust-experiments/tree/main/read-toml) - Read values from a TOML formatted file using [`Serde`](https://serde.rs).
++ [REPL](https://github.com/keithsharp/rust-experiments/tree/main/repl) - Create a Read, Eval, Print, Loop (REPL) interface using [`reedline-repl-rs`](https://docs.rs/reedline-repl-rs/latest/reedline_repl_rs/).
 
 ## AWS Rust SDK
 [GitHub](https://github.com/awslabs/aws-sdk-rust) and [documentation](https://awslabs.github.io/aws-sdk-rust/).
