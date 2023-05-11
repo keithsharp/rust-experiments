@@ -29,6 +29,10 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [SQS](https://github.com/keithsharp/rust-experiments/tree/main/sqs) - Create, delete, describe, and send messages to SQS queues.
 + [VPC Filter](https://github.com/keithsharp/rust-experiments/tree/main/vpc-filter) - Describe a VPC based on it's tags.
 
+## Axum
+[GitHub](https://github.com/tokio-rs/axum) and [documentation](https://docs.rs/axum/latest/axum/).
++ [Axum Basics](https://github.com/keithsharp/rust-experiments/tree/main/axum-basic) - Basic routing and HTTP methods.
+
 ## Clap
 [GitHub](https://github.com/clap-rs/clap) and [documentation](https://docs.rs/clap/latest/clap/).
 + [Argument Parsing](https://github.com/keithsharp/rust-experiments/tree/main/clap-basic-args) - Basic Clap argument parsing.

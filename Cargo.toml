@@ -5,6 +5,7 @@ members = [
     "aws-list-buckets",
     "aws-profile",
     "aws-vpc",
+    "axum-basic",
     "clap-basic-args",
     "clap-positional",
     "clap-subcommands",
@@ -34,6 +35,7 @@ aws-sdk-iam = "0.27"
 aws-sdk-s3 = "0.27"
 aws-sdk-sqs = "0.27"
 aws-types = "0.55"
+axum = "0.6"
 clap = { version = "4.1", features = ["derive"] }
 env_logger = "0.10"
 log = "0.4"

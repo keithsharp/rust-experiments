@@ -1,0 +1,13 @@
+[package]
+name = "axum-basic"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Basic routing and HTTP methods"
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+clap.workspace = true
+tokio.workspace = true
