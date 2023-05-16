@@ -1,0 +1,13 @@
+[package]
+name = "nats-basic"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Basic pub/sub using NATS"
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+async-nats = "0.29.0"
+futures = "0.3.28"
+tokio.workspace = true

@@ -16,6 +16,7 @@ members = [
     "inspect-vpc",
     "internet-gateway",
     "more-errors",
+    "nats-basic",
     "option",
     "read-toml",
     "reedline-test",

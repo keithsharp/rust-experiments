@@ -39,8 +39,12 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Positional Arguments](https://github.com/keithsharp/rust-experiments/tree/main/clap-positional) - Experiment with Clap positional arguments.
 + [Subcommands](https://github.com/keithsharp/rust-experiments/tree/main/clap-subcommands) - Experiment with Clap subcommands and args.
 
+## NATS
+[Github](https://github.com/nats-io/nats.rs) and [documentation](https://docs.rs/async-nats/0.29.0/async_nats/).
++ [NATS Basic](https://github.com/keithsharp/rust-experiments/tree/main/nats-basic) - Basic pub/sub using NATS.
+
 # Copyright and License
-Copyright 2022, Keith Sharp, kms@passback.co.uk.
+Copyright 2023, Keith Sharp, kms@passback.co.uk.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
