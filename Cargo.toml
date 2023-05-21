@@ -30,6 +30,7 @@ members = [
 
 [workspace.dependencies]
 anyhow = "1.0"
+async-nats = "0.29.0"
 aws-config = "0.55"
 aws-sdk-ec2 = "0.27"
 aws-sdk-iam = "0.27"
@@ -39,6 +40,7 @@ aws-types = "0.55"
 axum = "0.6"
 clap = { version = "4.1", features = ["derive"] }
 env_logger = "0.10"
+futures = "0.3.28"
 log = "0.4"
 rand = "0.8"
 tokio = { version = "1", features = ["full"] }
