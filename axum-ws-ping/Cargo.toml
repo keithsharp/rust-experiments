@@ -1,0 +1,22 @@
+[package]
+name = "axum-ws-ping"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "A WebSocket ping server using Axum"
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "server"
+path = "./src/bin/server.rs"
+
+[[bin]]
+name = "client"
+path = "./src/bin/client.rs"
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+futures.workspace = true
+tokio.workspace = true
+websockets = "0.3.0"
