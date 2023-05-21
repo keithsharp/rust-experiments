@@ -34,6 +34,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Axum Basics](https://github.com/keithsharp/rust-experiments/tree/main/axum-basic) - Basic routing and HTTP methods.
 + [Axum WS Ping](https://github.com/keithsharp/rust-experiments/tree/main/axum-ws-ping) - A WebSocket ping server using Axum.
 + [Axum JavaScript Messages](https://github.com/keithsharp/rust-experiments/tree/main/axum-js-msg) - Axum WebSocket server with JavaScript messages.
++ [Axum JWT](https://github.com/keithsharp/rust-experiments/tree/main/axum-jwt) - Authentication in Axum using JWTs.
 
 ## Clap
 [GitHub](https://github.com/clap-rs/clap) and [documentation](https://docs.rs/clap/latest/clap/).
