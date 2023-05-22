@@ -1,17 +1,28 @@
 [package]
-name = "axum-jwt"
+name = "axum-ws-jwt"
 authors = ["Keith Sharp <kms@passback.co.uk"]
-description = "Authentication in Axum using JWTs"
+description = "WebSocket authentication in Axum using JWTs"
 license = "AGPL-3.0-or-later"
 version = "0.1.0"
 edition = "2021"
+
+[[bin]]
+name = "server"
+path = "./src/bin/server.rs"
+
+[[bin]]
+name = "client"
+path = "./src/bin/client.rs"
 
 [dependencies]
 anyhow.workspace = true
 axum.workspace = true
 chrono.workspace = true
+futures.workspace = true
 jsonwebtoken.workspace = true
 once_cell.workspace = true
+reqwest = { version = "0.11.18", features = ["serde_json", "json"] }
 serde.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
+websockets.workspace = true
