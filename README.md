@@ -36,6 +36,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Axum JavaScript Messages](https://github.com/keithsharp/rust-experiments/tree/main/axum-js-msg) - Axum WebSocket server with JavaScript messages.
 + [Axum JWT](https://github.com/keithsharp/rust-experiments/tree/main/axum-jwt) - Authentication in Axum using JWTs.
 + [Axum WS Auth](https://github.com/keithsharp/rust-experiments/tree/main/axum-ws-jwt) - WebSocket authentication in Axum using JWTs.
++ [Axum Errors](https://github.com/keithsharp/rust-experiments/tree/main/axum-errors) - Returning errors when Axum handlers fail.
 
 ## Clap
 [GitHub](https://github.com/clap-rs/clap) and [documentation](https://docs.rs/clap/latest/clap/).

@@ -6,6 +6,7 @@ members = [
     "aws-profile",
     "aws-vpc",
     "axum-basic",
+    "axum-errors",
     "axum-js-msg",
     "axum-jwt",
     "axum-ws-ping",
