@@ -19,6 +19,7 @@ members = [
     "default-vpc-sg",
     "error-tests",
     "inspect-vpc",
+    "interior-mutability",
     "internet-gateway",
     "more-errors",
     "nats-basic",

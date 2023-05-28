@@ -3,6 +3,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 
 ## General Rust
 + [Error Handling](https://github.com/keithsharp/rust-experiments/tree/main/error-tests) - Basic experiments using Rust Errors.
++ [Interior Mutability](https://github.com/keithsharp/rust-experiments/tree/main/interior-mutability) - Experiments using RefCell to avoid the borrow checker.
 + [More Error Handling](https://github.com/keithsharp/rust-experiments/tree/main/more-errors) - More experiments with Rust Errors and the [`thiserror`](https://docs.rs/thiserror/latest/thiserror/) crate.
 + [Options](https://github.com/keithsharp/rust-experiments/tree/main/option) - Experiments using Rust Option enums and their methods.
 
