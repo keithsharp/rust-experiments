@@ -1,0 +1,9 @@
+[package]
+name = "interior-mutability-threaded"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Using Arc and Mutex to replace RefCell when using threads."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]

@@ -20,6 +20,7 @@ members = [
     "error-tests",
     "inspect-vpc",
     "interior-mutability",
+    "interior-mutability-threaded",
     "internet-gateway",
     "more-errors",
     "nats-basic",
