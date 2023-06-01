@@ -12,6 +12,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Parsing TOML](https://github.com/keithsharp/rust-experiments/tree/main/read-toml) - Read values from a TOML formatted file using [`serde`](https://serde.rs).
 + [Reedline](https://github.com/keithsharp/rust-experiments/tree/main/reedline) - Reading from the terminal with [`reedline`](https://docs.rs/reedline/latest/reedline/). 
 + [REPL](https://github.com/keithsharp/rust-experiments/tree/main/repl) - Create a Read, Eval, Print, Loop (REPL) interface using [`reedline-repl-rs`](https://docs.rs/reedline-repl-rs/latest/reedline_repl_rs/).
++ [Rusqlite](https://github.com/keithsharp/rust-experiments/tree/main/sql-rusqlite) - Experiments using [`rusqlite`](https://docs.rs/rusqlite/latest/rusqlite/).
 
 ## AWS Rust SDK
 [GitHub](https://github.com/awslabs/aws-sdk-rust) and [documentation](https://awslabs.github.io/aws-sdk-rust/).

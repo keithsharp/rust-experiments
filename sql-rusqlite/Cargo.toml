@@ -1,0 +1,11 @@
+[package]
+name = "sql-rusqlite"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Experiments using Rusqlite."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+rusqlite = { version = "0.29.0", features = ["bundled"] }
