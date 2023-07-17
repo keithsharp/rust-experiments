@@ -1,0 +1,12 @@
+[package]
+name = "host"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "Host binary to load and run a WASM plugin."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+wasmtime = "10.0.1"
+wasmtime-wasi = "10.0.1"

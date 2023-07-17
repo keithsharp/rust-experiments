@@ -1,0 +1,12 @@
+[package]
+name = "plugin"
+authors = ["Keith Sharp <kms@passback.co.uk"]
+description = "WASM plugin for the host to load and run."
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"] # cdylib is needed for WASM, rlib is the Rust default
+
+[dependencies]
