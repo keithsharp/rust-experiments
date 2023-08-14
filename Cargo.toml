@@ -40,13 +40,13 @@ members = [
 
 [workspace.dependencies]
 anyhow = "1.0"
-async-nats = "0.29.0"
-aws-config = "0.55"
-aws-sdk-ec2 = "0.27"
-aws-sdk-iam = "0.27"
-aws-sdk-s3 = "0.27"
-aws-sdk-sqs = "0.27"
-aws-types = "0.55"
+async-nats = "0.31.0"
+aws-config = "0.56"
+aws-sdk-ec2 = "0.29"
+aws-sdk-iam = "0.29"
+aws-sdk-s3 = "0.29"
+aws-sdk-sqs = "0.29"
+aws-types = "0.56"
 axum = { version = "0.6", features = ["headers", "ws"] }
 chrono = "0.4.24"
 clap = { version = "4.1", features = ["derive"] }
