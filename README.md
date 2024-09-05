@@ -8,6 +8,7 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [More Error Handling](https://github.com/keithsharp/rust-experiments/tree/main/more-errors) - More experiments with Rust Errors and the [`thiserror`](https://docs.rs/thiserror/latest/thiserror/) crate.
 + [Options](https://github.com/keithsharp/rust-experiments/tree/main/option) - Experiments using Rust Option enums and their methods.
 + [WASM Plugin](https://github.com/keithsharp/rust-experiments/tree/main/wasm-plugin) - A WASM plugin in Rust that is loaded into a host Rust program using [Wasmtime](https://docs.rs/wasmtime/latest/wasmtime/index.html), also shows how to [read a string returned from a WASM function](https://stackoverflow.com/questions/76700040/calling-a-wasm-function-that-returns-a-string-from-wasmtime).
++ [Write File](https://github.com/keithsharp/rust-experiments/tree/main/write-file) - Writing a file and setting its permissions.
 
 ## Interesting Crates
 + [Parsing TOML](https://github.com/keithsharp/rust-experiments/tree/main/read-toml) - Read values from a TOML formatted file using [`serde`](https://serde.rs).
