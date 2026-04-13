@@ -1,0 +1,17 @@
+[package]
+name = "zenoh-basic"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "pub"
+path = "src/pub.rs"
+
+[[bin]]
+name = "sub"
+path = "src/sub.rs"
+
+[dependencies]
+futures.workspace = true
+tokio.workspace = true
+zenoh = "1.9.0"

@@ -1,5 +1,5 @@
 [workspace]
-resolver = "1"
+resolver = "3"
 members = [
     "aws-create-bucket",
     "aws-create-vpc",
@@ -37,7 +37,8 @@ members = [
     "vpc-filter",
     "wasm-plugin/plugin",
     "wasm-plugin/host",
-    "write-file"
+    "write-file",
+    "zenoh-basic"
 ]
 
 [workspace.dependencies]

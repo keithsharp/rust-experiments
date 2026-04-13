@@ -49,9 +49,12 @@ Small experiments in writing Rust programs to perform specific tasks.  Clone the
 + [Positional Arguments](https://github.com/keithsharp/rust-experiments/tree/main/clap-positional) - Experiment with Clap positional arguments.
 + [Subcommands](https://github.com/keithsharp/rust-experiments/tree/main/clap-subcommands) - Experiment with Clap subcommands and args.
 
-## NATS
+## Pub/Sub Messaging
 [Github](https://github.com/nats-io/nats.rs) and [documentation](https://docs.rs/async-nats/0.29.0/async_nats/).
 + [NATS Basic](https://github.com/keithsharp/rust-experiments/tree/main/nats-basic) - Basic pub/sub using NATS.
+
+[Zenoh](https://github.com/eclipse-zenoh/zenoh) and [documentation](https://docs.rs/zenoh/latest/zenoh/index.html).
++ [Zenoh Basic](https://github.com/keithsharp/rust-experiments/tree/main/zenoh-basic) - Basic pub/sub using Zenoh.
 
 # Copyright and License
 Copyright 2023, Keith Sharp, kms@passback.co.uk.
